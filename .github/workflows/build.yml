@@ -10,7 +10,22 @@ on:
   push:
     branches: [main]
     tags: ["v*"]
+    # Mudanças só no site ou na documentação não precisam gerar o app de novo.
+    paths-ignore:
+      - "index.html"
+      - "site/**"
+      - "docs/**"
+      - "README.md"
+      - ".nojekyll"
+      - "scripts/make_site_assets.py"
   pull_request:
+    paths-ignore:
+      - "index.html"
+      - "site/**"
+      - "docs/**"
+      - "README.md"
+      - ".nojekyll"
+      - "scripts/make_site_assets.py"
   workflow_dispatch:
 
 permissions:
