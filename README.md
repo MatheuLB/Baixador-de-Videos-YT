@@ -4,7 +4,7 @@ App de desktop para **Windows, macOS e Linux** que baixa vídeos e músicas do
 YouTube (e de [centenas de outros sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md))
 a partir de um link.
 
-**[⬇ Baixar a versão mais recente](https://github.com/MatheuLB/Baixador-de-Videos-YT/releases/latest)**
+**[⬇ Baixar a versão mais recente](https://github.com/MatheuLB/Baixador-de-Videos-YT/releases/latest)** · **[Site do app](https://matheulb.github.io/Baixador-de-Videos-YT/)**
 
 | Tema escuro | Tema claro |
 |---|---|
@@ -147,6 +147,7 @@ baixador/
 │       ├── setup_dialog.py
 │       ├── theme.py      # cores, fonte Inter e estilo (claro/escuro)
 │       └── icons.py
+├── index.html, site/     # site de download (GitHub Pages)
 ├── assets/               # ícone do app e fonte Inter
 ├── packaging/            # instalador do Windows, .desktop e install.sh do Linux
 ├── scripts/              # empacotamento e geração do ícone
