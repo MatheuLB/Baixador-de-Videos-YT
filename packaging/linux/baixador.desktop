@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Baixador de Vídeos
+GenericName=Baixador de vídeos
+Comment=Baixe vídeos e músicas a partir de um link
+Exec=Baixador
+Icon=baixador
+Terminal=false
+Categories=AudioVideo;Network;
+Keywords=youtube;video;vídeo;download;mp3;música;
+StartupWMClass=Baixador
