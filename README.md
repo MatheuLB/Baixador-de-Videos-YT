@@ -4,6 +4,8 @@ App de desktop para **Windows, macOS e Linux** que baixa vídeos e músicas do
 YouTube (e de [centenas de outros sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md))
 a partir de um link.
 
+**[⬇ Baixar a versão mais recente](https://github.com/MatheuLB/Baixador-de-Videos-YT/releases/latest)**
+
 | Tema escuro | Tema claro |
 |---|---|
 | ![Tema escuro](docs/tema-escuro.png) | ![Tema claro](docs/tema-claro.png) |
@@ -46,25 +48,40 @@ Se o FFmpeg ou o Deno já estiverem instalados no sistema, o app usa os que já 
 
 ## Instalar
 
-Baixe o arquivo do seu sistema na página de **Releases** do repositório.
+Baixe o arquivo do seu sistema na página de
+**[Releases](https://github.com/MatheuLB/Baixador-de-Videos-YT/releases/latest)**:
+
+| Sistema | Instalador | Extrair e usar |
+|---|---|---|
+| Windows 10/11 | `…-windows-x64-instalador.exe` | `…-windows-x64-portatil.zip` |
+| Mac com chip Apple (M1 em diante) | `…-macos-apple-silicon.dmg` | `…-macos-apple-silicon.zip` |
+| Mac com processador Intel | `…-macos-intel.dmg` | `…-macos-intel.zip` |
+| Linux | `…-linux-x64.AppImage` | `…-linux-x64.tar.gz` |
+
+Os arquivos "extrair e usar" trazem um `LEIA-ME.txt` com o passo a passo.
 
 ### Windows
-Rode `Baixador-…-windows-x64-instalador.exe`. Não pede senha de administrador.
-Também existe a versão portátil (`.zip`): é só descompactar e abrir `Baixador.exe`.
+Rode o `…-instalador.exe`. Ele não pede senha de administrador.
+Ou extraia o `…-portatil.zip` e abra `Baixador\Baixador.exe`.
 
 Na primeira vez, o Windows pode mostrar **"O Windows protegeu o computador"**
 (SmartScreen), porque o app não tem certificado de assinatura pago. Clique em
 **Mais informações → Executar assim mesmo**.
 
-### macOS
-Abra o `.dmg` e arraste o **Baixador** para **Aplicativos**.
-Use `macos-arm64` para Macs com chip Apple (M1 em diante) e `macos-x64` para Macs Intel.
+### macOS (12 Monterey ou mais novo)
+Abra o `.dmg` (ou extraia o `.zip`) e arraste o **Baixador** para **Aplicativos**.
+Para saber qual baixar: menu Apple → **Sobre Este Mac**. "Chip Apple M…" = `apple-silicon`,
+"Processador Intel" = `intel`.
 
-Como o app não é assinado pela Apple, o macOS bloqueia a primeira abertura. Para liberar:
-1. Tente abrir o app uma vez (vai aparecer o aviso) e feche o aviso.
-2. Vá em **Ajustes do Sistema → Privacidade e Segurança** e clique em **Abrir Mesmo Assim**.
+Como o app não é assinado pela Apple, o macOS bloqueia a primeira abertura. Para liberar,
+o jeito mais garantido é rodar uma vez no Terminal:
 
-Ou, no Terminal: `xattr -dr com.apple.quarantine /Applications/Baixador.app`
+```bash
+xattr -cr /Applications/Baixador.app
+```
+
+Ou: tente abrir o app, feche o aviso, vá em **Ajustes do Sistema → Privacidade e Segurança**
+e clique em **Abrir Mesmo Assim**.
 
 ### Linux
 - **AppImage** (mais fácil): `chmod +x Baixador-*.AppImage` e abra. Se reclamar de FUSE,
@@ -83,8 +100,8 @@ do GitHub, um para cada sistema (o PyInstaller não faz build cruzado):
 | Sistema | Arquivos gerados |
 |---|---|
 | Windows x64 | instalador `.exe` (Inno Setup) + `.zip` portátil |
-| macOS Apple Silicon | `.dmg` |
-| macOS Intel | `.dmg` |
+| macOS Apple Silicon | `.dmg` + `.zip` |
+| macOS Intel | `.dmg` + `.zip` |
 | Linux x64 | `.AppImage` + `.tar.gz` |
 
 1. Suba o projeto para um repositório no GitHub.

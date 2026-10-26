@@ -1,0 +1,17 @@
+BAIXADOR DE VÍDEOS (Linux 64 bits)
+
+COMO USAR
+- Rode o arquivo "Baixador" desta pasta.
+- Para colocar no menu de aplicativos, rode ./install.sh
+  (para desinstalar: ~/.local/opt/baixador/install.sh --remover)
+
+Em algumas distribuições é preciso instalar libxcb-cursor0
+(Ubuntu/Debian: sudo apt install libxcb-cursor0).
+
+Na primeira vez que abrir, o app baixa sozinho os componentes de que precisa
+(yt-dlp, FFmpeg e Deno, cerca de 110 MB). Isso só acontece uma vez.
+
+Baixe apenas conteúdo que você tem direito de baixar: seus próprios vídeos,
+conteúdo de domínio público, com licença livre ou com autorização do dono.
+
+Site do projeto: https://github.com/MatheuLB/Baixador-de-Videos-YT

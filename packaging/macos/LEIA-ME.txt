@@ -1,0 +1,28 @@
+BAIXADOR DE VÍDEOS (macOS)
+
+COMO USAR
+1. Arraste o "Baixador" para a pasta Aplicativos.
+2. Libere o app (só na primeira vez). Como ele não é assinado pela Apple
+   (o certificado é pago), o macOS bloqueia a abertura. Use UMA das formas:
+
+   JEITO MAIS GARANTIDO: abra o app "Terminal", cole a linha abaixo e
+   aperte Enter:
+       xattr -cr /Applications/Baixador.app
+   Depois é só abrir o Baixador normalmente.
+
+   OU: tente abrir o app, feche o aviso, vá em Ajustes do Sistema >
+   Privacidade e Segurança, role até o fim, clique em "Abrir Mesmo Assim"
+   e confirme com sua senha.
+
+QUAL VERSÃO BAIXAR?
+Menu Apple > Sobre Este Mac:
+  - "Chip Apple M1/M2/M3/M4..." -> versão apple-silicon
+  - "Processador Intel"         -> versão intel
+
+Na primeira vez que abrir, o app baixa sozinho os componentes de que precisa
+(yt-dlp, FFmpeg e Deno, cerca de 110 MB). Isso só acontece uma vez.
+
+Baixe apenas conteúdo que você tem direito de baixar: seus próprios vídeos,
+conteúdo de domínio público, com licença livre ou com autorização do dono.
+
+Site do projeto: https://github.com/MatheuLB/Baixador-de-Videos-YT

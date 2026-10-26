@@ -1,7 +1,7 @@
 """Empacota o resultado do PyInstaller (pasta dist/) no formato de cada sistema.
 
 - Windows: instalador .exe (Inno Setup) + .zip portátil
-- macOS:   .dmg com atalho para a pasta Aplicativos
+- macOS:   .dmg com atalho para a pasta Aplicativos + .zip (extrair e usar)
 - Linux:   AppImage + .tar.gz com script de instalação
 
 Uso (depois de `pyinstaller --noconfirm --clean baixador.spec`):
@@ -18,7 +18,9 @@ import stat
 import subprocess
 import sys
 import tarfile
+import time
 import urllib.request
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -66,6 +68,8 @@ def package_windows() -> None:
     source = DIST / APP_NAME
     portable = OUT / f"{APP_NAME}-{__version__}-windows-x64-portatil"
     shutil.make_archive(str(portable), "zip", DIST, APP_NAME)
+    with zipfile.ZipFile(f"{portable}.zip", "a") as zf:
+        zf.write(PACKAGING / "windows" / "LEIA-ME.txt", "LEIA-ME.txt")
 
     iscc = find_iscc()
     if iscc is None:
@@ -90,21 +94,42 @@ def package_macos() -> None:
     app = DIST / f"{APP_NAME}.app"
     # Assinatura "ad-hoc": não substitui a da Apple, mas é obrigatória no Apple Silicon.
     run(["codesign", "--force", "--deep", "--sign", "-", app])
+    chip = "apple-silicon" if arch_label() == "arm64" else "intel"
+    readme = PACKAGING / "macos" / "LEIA-ME.txt"
+
+    # .zip: extrair e arrastar para Aplicativos (o ditto preserva links e permissões).
+    zip_staging = DIST / "zip"
+    shutil.rmtree(zip_staging, ignore_errors=True)
+    zip_staging.mkdir()
+    shutil.copytree(app, zip_staging / app.name, symlinks=True)
+    shutil.copy(readme, zip_staging / "LEIA-ME.txt")
+    run(["ditto", "-c", "-k", "--sequesterRsrc", zip_staging,
+         OUT / f"{APP_NAME}-{__version__}-macos-{chip}.zip"])
 
     staging = DIST / "dmg"
     shutil.rmtree(staging, ignore_errors=True)
     staging.mkdir()
     shutil.copytree(app, staging / app.name, symlinks=True)
+    shutil.copy(readme, staging / "LEIA-ME.txt")
     (staging / "Applications").symlink_to("/Applications")
 
-    dmg = OUT / f"{APP_NAME}-{__version__}-macos-{arch_label()}.dmg"
-    run([
+    dmg = OUT / f"{APP_NAME}-{__version__}-macos-{chip}.dmg"
+    command = [
         "hdiutil", "create",
         "-volname", APP_DISPLAY_NAME,
         "-srcfolder", staging,
         "-ov", "-format", "UDZO",
         dmg,
-    ])
+    ]
+    # O hdiutil às vezes falha com "Resource busy" nas máquinas do GitHub.
+    for attempt in range(1, 4):
+        try:
+            run(command)
+            return
+        except subprocess.CalledProcessError:
+            if attempt == 3:
+                raise
+            time.sleep(10 * attempt)
 
 
 # --------------------------------------------------------------------------
@@ -124,6 +149,7 @@ def package_linux() -> None:
     shutil.copy(linux / "baixador.desktop", staging / "baixador.desktop")
     shutil.copy(ROOT / "assets" / "icon.png", staging / "baixador.png")
     shutil.copy(linux / "install.sh", staging / "install.sh")
+    shutil.copy(linux / "LEIA-ME.txt", staging / "LEIA-ME.txt")
     make_executable(staging / "install.sh")
     tar_path = OUT / f"{APP_NAME}-{__version__}-linux-{arch}.tar.gz"
     with tarfile.open(tar_path, "w:gz") as tar:

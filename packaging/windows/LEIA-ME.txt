@@ -1,0 +1,21 @@
+﻿BAIXADOR DE VÍDEOS (Windows 10 e 11, 64 bits)
+
+COMO USAR
+1. Extraia este .zip: botão direito no arquivo > "Extrair tudo...".
+   (Não abra o programa de dentro do .zip sem extrair.)
+2. Abra a pasta "Baixador" e dê dois cliques em "Baixador.exe".
+3. Se aparecer "O Windows protegeu o computador", clique em
+   "Mais informações" > "Executar assim mesmo". O aviso aparece porque o app
+   não tem certificado de assinatura pago; só acontece na primeira vez.
+
+ATALHO NA ÁREA DE TRABALHO
+Botão direito em "Baixador.exe" > "Mostrar mais opções" > "Enviar para" >
+"Área de trabalho (criar atalho)".
+
+Na primeira vez que abrir, o app baixa sozinho os componentes de que precisa
+(yt-dlp, FFmpeg e Deno, cerca de 110 MB). Isso só acontece uma vez.
+
+Baixe apenas conteúdo que você tem direito de baixar: seus próprios vídeos,
+conteúdo de domínio público, com licença livre ou com autorização do dono.
+
+Site do projeto: https://github.com/MatheuLB/Baixador-de-Videos-YT
