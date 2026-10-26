@@ -1,8 +1,9 @@
 # Gera o app para Windows, macOS (Apple Silicon e Intel) e Linux.
 #
 # - Em cada push/PR: os pacotes ficam disponíveis em "Actions" > execução > "Artifacts".
-# - Ao criar uma tag v* (ex.: git tag v1.0.0 && git push origin v1.0.0):
-#   além disso, é criada uma Release no GitHub com todos os instaladores.
+# - Publicar uma versão nova: mude __version__ em baixador/__init__.py e envie para a
+#   main. Se essa versão ainda não tem release, o workflow cria a tag (ex.: v1.0.1)
+#   e a Release com todos os instaladores. Enviar uma tag v* também publica.
 name: Build
 
 on:
@@ -14,6 +15,11 @@ on:
 
 permissions:
   contents: read
+
+# Um push novo na mesma branch cancela o build anterior, que ficou desatualizado.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -88,18 +94,37 @@ jobs:
   release:
     name: Publicar release
     # Publica o que deu certo, mesmo que uma das plataformas tenha falhado.
-    if: ${{ !cancelled() && startsWith(github.ref, 'refs/tags/v') }}
+    if: ${{ !cancelled() && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main') }}
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Ver se esta versão já foi publicada
+        id: version
+        run: |
+          VERSION=$(python3 -c "import re; print(re.search(r'__version__ = \"([^\"]+)\"', open('baixador/__init__.py').read()).group(1))")
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          if [ "$GITHUB_REF" != "refs/tags/v$VERSION" ] && git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" > /dev/null; then
+            echo "A versão $VERSION já tem release; nada a publicar."
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/download-artifact@v4
+        if: steps.version.outputs.publish == 'true'
         with:
           path: release
           merge-multiple: true
 
       - uses: softprops/action-gh-release@v2
+        if: steps.version.outputs.publish == 'true'
         with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Baixador de Vídeos ${{ steps.version.outputs.tag }}
+          target_commitish: ${{ github.sha }}
           files: release/*
           generate_release_notes: true

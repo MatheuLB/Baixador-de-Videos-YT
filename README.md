@@ -106,12 +106,9 @@ do GitHub, um para cada sistema (o PyInstaller não faz build cruzado):
 
 1. Suba o projeto para um repositório no GitHub.
 2. A cada push na `main`, os pacotes aparecem em **Actions → (execução) → Artifacts**.
-3. Para publicar uma versão: altere `__version__` em `baixador/__init__.py` e crie uma tag:
-   ```bash
-   git tag v1.0.0
-   git push origin v1.0.0
-   ```
-   O workflow cria uma **Release** com todos os instaladores anexados.
+3. Para publicar uma versão nova: altere `__version__` em `baixador/__init__.py`
+   (por exemplo, para `1.0.1`) e envie para a `main`. Se essa versão ainda não tem
+   release, o workflow cria a tag `v1.0.1` e a **Release** com todos os instaladores.
 
 ## Rodar a partir do código
 
