@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from PySide6.QtCore import QSettings, QTimer
+from PySide6.QtCore import QLibraryInfo, QLocale, QSettings, QTimer, QTranslator
 from PySide6.QtWidgets import QApplication
 
 from .. import APP_NAME, __version__, tools
@@ -21,6 +21,12 @@ def run() -> int:
     app.setWindowIcon(window_icon())
     if tools.current_os() == "linux":
         app.setDesktopFileName("baixador")  # liga a janela ao ícone do .desktop
+
+    # Traduz os textos do próprio Qt ("Sim", "Não", "Mostrar detalhes…", diálogos de pasta).
+    translator = QTranslator(app)
+    translations = QLibraryInfo.path(QLibraryInfo.LibraryPath.TranslationsPath)
+    if translator.load(QLocale(QLocale.Language.Portuguese, QLocale.Country.Brazil), "qtbase", "_", translations):
+        app.installTranslator(translator)
 
     theme.load_fonts(app)
     theme.set_preference(app, str(QSettings().value("theme", theme.THEME_SYSTEM)))

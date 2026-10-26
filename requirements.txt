@@ -1,2 +1,2 @@
-PySide6-Essentials>=6.8,<7
+PySide6-Essentials==6.9.3  # 6.9 roda no macOS 12+; versões mais novas exigem macOS 13 ou 14
 certifi>=2024.2.2
